@@ -1,15 +1,28 @@
 import React from "react";
 import styles from "./WorkoutDetails.module.css";
-
-interface Workout {
-  title: string;
-  load: number;
-  reps: number;
-  createdAt: string;
-}
+import { Workout } from "../../interfaces/Workout.ts";
+import { useWorkoutsContext } from "../../context/hooks/useWorkoutsContext.tsx";
 
 const WorkoutDetails: React.FC<{ workout: Workout }> = ({ workout }) => {
   const createdAtDate = new Date(workout.createdAt);
+
+  const { dispatch } = useWorkoutsContext();
+
+  const handleDelete = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:4000/api/workouts/${workout._id}`,
+        {
+          method: "DELETE",
+        },
+      );
+      if (response.ok) {
+        dispatch({ type: "DELETE_WORKOUT", payload: workout._id });
+      }
+    } catch (error) {
+      console.error("Error deleting workout:", error);
+    }
+  };
 
   const options = {
     year: "numeric",
@@ -36,6 +49,7 @@ const WorkoutDetails: React.FC<{ workout: Workout }> = ({ workout }) => {
         <strong>Created At: </strong>
         {formattedDate}
       </p>
+      <button onClick={handleDelete}>Delete</button>
     </div>
   );
 };

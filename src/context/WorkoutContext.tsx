@@ -1,18 +1,7 @@
-import React, { createContext, useReducer, ReactNode } from "react"; // Import ReactNode
-
-interface Workout {
-  _id: string;
-  title: string;
-  reps: number;
-  load: number;
-  createdAt: string;
-  updatedAt: string;
-  __v: number;
-}
-
-interface WorkoutsState {
-  workouts: Workout[] | null;
-}
+import React, { createContext, useReducer } from "react";
+import { Workout } from "../interfaces/Workout.ts";
+import { WorkoutsContextProviderProps } from "../interfaces/WorkoutContextProviderProps.ts";
+import { WorkoutsState } from "../interfaces/WorkoutsState.ts";
 
 type WorkoutsAction =
   | { type: "SET_WORKOUTS"; payload: Workout[] }
@@ -53,17 +42,18 @@ export const workoutsReducer = (
   }
 };
 
-interface WorkoutsContextProviderProps {
-  children: ReactNode; // Use ReactNode for children prop
-}
-
 const WorkoutsContextProvider = ({
   children,
 }: WorkoutsContextProviderProps) => {
   const [state, dispatch] = useReducer(workoutsReducer, { workouts: null });
 
+  const contextValue = {
+    state,
+    dispatch,
+  };
+
   return (
-    <WorkoutsContext.Provider value={{ state, dispatch }}>
+    <WorkoutsContext.Provider value={contextValue}>
       {children}
     </WorkoutsContext.Provider>
   );
