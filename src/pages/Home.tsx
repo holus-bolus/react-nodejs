@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import WorkoutDetails from "../components/WorkoutDetails/WorkoutDetails.tsx";
+import WorkoutForm from "../components/WorkoutForm/WorkoutForm.tsx";
 
 interface Workout {
   _id: string;
@@ -29,6 +30,7 @@ const Home: React.FC = () => {
 
   return (
     <div className="home">
+      <WorkoutForm />
       <div className="workouts">
         {workouts &&
           workouts.map((workout) => (
