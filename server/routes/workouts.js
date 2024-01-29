@@ -3,6 +3,8 @@ const {
   createWorkout,
   getWorkouts,
   getWorkout,
+  deleteWorkout,
+  updateWorkout,
 } = require("../controllers/workoutController");
 const router = express.Router();
 const Workout = require("../models/WorkoutModel");
@@ -46,9 +48,7 @@ router.post("/", createWorkout);
  * @param {object} res - The HTTP response object.
  * @param {string} req.params.id - The ID of the workout to delete.
  */
-router.delete("/:id", (req, res) => {
-  res.json({ message: "Delete a workout" });
-});
+router.delete("/:id", deleteWorkout);
 
 /**
  * Handles HTTP PATCH requests for updating a workout by its ID.
@@ -58,8 +58,6 @@ router.delete("/:id", (req, res) => {
  * @param {object} res - The HTTP response object.
  * @param {string} req.params.id - The ID of the workout to update.
  */
-router.patch("/:id", (req, res) => {
-  res.json({ message: "Update a workout" });
-});
+router.patch("/:id", updateWorkout);
 
 module.exports = router;

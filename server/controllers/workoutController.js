@@ -1,6 +1,16 @@
 const Workout = require("../models/WorkoutModel");
 const mongoose = require("mongoose");
 
+const validateId = (req, res, next) => {
+  const { id } = req.params;
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ error: `ID ${id} is not valid` });
+  }
+  next(); // Proceed to the next middleware or route handler if the ID is valid
+};
+
+// T
+
 /**
  * Handles HTTP GET requests to retrieve all workouts.
  * @async
@@ -20,6 +30,7 @@ const getWorkouts = async (req, res) => {
  * @param {object} req - The HTTP request object.
  * @param {object} res - The HTTP response object.
  * @param {string} req.params.id - The ID of the workout to retrieve.
+ *
  */
 const getWorkout = async (req, res) => {
   const { id } = req.params;
@@ -66,12 +77,19 @@ const createWorkout = async (req, res) => {
  * @param {string} req.params.id - The ID of the workout to delete.
  */
 const deleteWorkout = async (req, res) => {
-  try {
-    const workout = await Workout.findByIdAndDelete(req.params.id);
-    res.status(200).json(workout);
-  } catch (err) {
-    res.status(400).json({ error: err.message });
+  const { id } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    res.status(404).json({ error: `ID ${id} is not valid` });
   }
+
+  const workout = await Workout.findOneAndDelete({ _id: id });
+
+  if (!workout) {
+    res.status(404).json({ error: `Workout with id ${id} has not been found` });
+  }
+
+  res.status(200).json(workout);
 };
 
 /**
@@ -83,7 +101,20 @@ const deleteWorkout = async (req, res) => {
  * @param {string} req.params.id - The ID of the workout to update.
  */
 const updateWorkout = async (req, res) => {
-  // Your code for updating a workout goes here
+  const { id } = req.params;
+  const { title, load, reps } = req.body;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    res.status(404).json({ error: `ID ${id} is not valid` });
+  }
+
+  const workout = await Workout.findOneAndUpdate({ _id: id }, { ...req.body });
+
+  if (!workout) {
+    res.status(404).json({ error: `Workout with id ${id} has not been found` });
+  }
+
+  res.status(200).json(workout);
 };
 
 module.exports = {
