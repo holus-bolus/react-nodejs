@@ -1,0 +1,22 @@
+
+.workoutDetails {
+  background-color: #f5f5f5;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  margin: 10px;
+}
+
+.workoutDetails h4 {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+}
+
+.workoutDetails p {
+  margin: 5px 0;
+}
+
+.workoutDetails strong {
+  font-weight: bold;
+}
+
